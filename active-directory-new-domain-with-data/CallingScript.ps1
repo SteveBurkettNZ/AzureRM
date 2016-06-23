@@ -57,7 +57,7 @@ $MyParams = @{
     adNicIPAddress        = '10.0.0.' + $count
     publicIPAddressName   = 'adpublicIP' + $count       
     adVMName              = 'adDC' + $count
-    adAvailabilitySetName = 'adAvailabiltySet' + $count
+    adAvailabilitySetName = 'adAvailabilitySet' + $count
  }
 
 
