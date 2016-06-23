@@ -44,6 +44,23 @@ $MyParams = @{
     addnsName             = $addnsName
    }
 
+$count = 10
+
+$MyParams = @{
+    newStorageAccountName = $saname
+    location              = 'West US'
+    domainName            = 'alpineskihouse.com'
+    addnsName             = $addnsName +  $count
+    virtualNetworkName    = 'adVNET' + $count
+    adSubnetName          = 'adSubnet' + $count
+    adNicName             = 'adNic' + $count
+    adNicIPAddress        = '10.0.0.' + $count
+    publicIPAddressName   = 'adpublicIP' + $count       
+    adVMName              = 'adDC' + $count
+    adAvailabilitySetName = 'adAvailabiltySet' + $count
+ }
+
+
 # Splat the parameters on New-AzureRmResourceGroupDeployment  
 $SplatParams = @{
     TemplateUri             = $URI 
@@ -51,6 +68,7 @@ $SplatParams = @{
     TemplateParameterObject = $MyParams
     Name                    = 'AlpineSkiHouseForest'
    }
+
 
 # This takes ~30 minutes
 # One prompt for the domain admin password

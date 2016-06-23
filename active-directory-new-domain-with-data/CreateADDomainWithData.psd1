@@ -20,8 +20,8 @@ George,P@ssw0rd,Marketing,Specialist
 Harriet,P@ssw0rd,Operations,Specialist
 '@
 
-        RootOUs = 'Accounting','IT','Marketing','Operations'
-        ChildOUs = 'Users','Computers','Groups'
+        RootOUs = 'AlpineSkiHouse'
+        ChildOUs = 'Users','Computers','Groups','Servers','Service Accounts'
         TestObjCount = 5
 
     }
