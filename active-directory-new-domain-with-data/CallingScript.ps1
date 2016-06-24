@@ -21,13 +21,15 @@ Import-Module Azure -Verbose
 # Authenticate to your Azure account
 Login-AzureRmAccount
 
+$count = 10
+
 # Adjust the 'yournamehere' part of these three strings to
 # something unique for you. Leave the last two characters in each.
 $URI       = 'https://raw.githubusercontent.com/SteveBurkettNZ/AzureRM/master/active-directory-new-domain-with-data/azuredeploy.json'
 $Location  = 'West US'
-$rgname    = 'emslab11rg'
-$saname    = 'emslab11sa'     # Lowercase required
-$addnsName = 'emslab11ad'     # Lowercase required
+$rgname    = 'emslab'+ $count + 'rg'
+$saname    = 'emslab'+ $count + 'sa'     # Lowercase required
+$addnsName = 'emslab'+ $count + 'ad'     # Lowercase required
 
 # Check that the public dns $addnsName is available
 if (Test-AzureRmDnsAvailability -DomainNameLabel $addnsName -Location $Location)
