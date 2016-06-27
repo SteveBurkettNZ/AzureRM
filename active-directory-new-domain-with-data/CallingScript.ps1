@@ -21,7 +21,7 @@ Import-Module Azure -Verbose
 # Authenticate to your Azure account
 Login-AzureRmAccount
 
-$count = 10
+$count = 15
 
 # Adjust the 'yournamehere' part of these three strings to
 # something unique for you. Leave the last two characters in each.
@@ -46,8 +46,6 @@ $MyParams = @{
     addnsName             = $addnsName
    }
 
-$count = 10
-
 $MyParams = @{
     newStorageAccountName = $saname
     location              = 'West US'
@@ -70,7 +68,6 @@ $SplatParams = @{
     TemplateParameterObject = $MyParams
     Name                    = 'AlpineSkiHouseForest'
    }
-
 
 # This takes ~30 minutes
 # One prompt for the domain admin password
