@@ -22,7 +22,10 @@ Harriet,P@ssw0rd,Operations,Specialist
 
         RootOUs = 'AlpineSkiHouse'
         ChildOUs = 'Users','Computers','Groups','Servers','Service Accounts'
+        UsersOUs = 'Cloud Users','Non-Cloud Users'
+        GroupsOUs = 'Cloud Security Groups','Non-Cloud Security Groups'
         TestObjCount = 5
+        LabCount = 6
 
     }
 } 
