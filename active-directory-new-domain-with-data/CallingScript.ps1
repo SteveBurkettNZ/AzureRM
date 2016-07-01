@@ -21,7 +21,7 @@ Import-Module Azure -Verbose
 # Authenticate to your Azure account
 Login-AzureRmAccount
 
-$count = 15
+$count = 13
 
 # Adjust the 'yournamehere' part of these three strings to
 # something unique for you. Leave the last two characters in each.
@@ -93,6 +93,8 @@ break
 #  Five new OU structures
 #  Users and populated groups within the OU structures
 #  Users root container has test users and populated test groups
+
+
 
 # Delete the entire resource group when finished
 Remove-AzureRmResourceGroup -Name $rgname -Force -Verbose
