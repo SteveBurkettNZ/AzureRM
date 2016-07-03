@@ -1,14 +1,4 @@
-﻿@{ 
-    AllNodes = @( 
-        @{ 
-            Nodename = 'localhost'
-            PSDscAllowDomainUser = $true
-        }
-    )
-
-    NonNodeData = @{
-
-        UserData = @'
+#TYPE Selected.System.Management.Automation.PSCustomObject,,,,,,,,,,,,,,,,,,
 Name,City,Country,Department,Displayname,EmailAddress,Fax,FirstName,LastName,MobilePhone,Office,PasswordNeverExpires,PhoneNumber,PostalCode,SignInName,State,StreetAddress,Title,UserPrincipalName
 AlexD,San Diego,United States,Sales & Marketing,Alex Darrow,AlexD@emsforcsp.com,,Alex,Darrow,,131/1104,TRUE,+1 858 555 0110,92121,AlexD@emsforcsp.com,CA,9256 Towne Center Dr,Marketing Assistant,AlexD@emsforcsp.com
 AllieB,Bellevue,United States,Finance,Allie Bellew,AllieB@emsforcsp.com,,Allie,Bellew,,18/2107,TRUE,+1 425 555 0105,98004,AllieB@emsforcsp.com,WA,205 108th Ave. NE,Administrative Assistant,AllieB@emsforcsp.com
@@ -35,27 +25,3 @@ RobinC,Fort Lauderdale,United States,Sales & Marketing,Robin Counts,RobinC@emsfo
 SaraD,Tulsa,United States,Sales & Marketing,Sara Davis,SaraD@emsforcsp.com,,Sara,Davis,,20/2107,TRUE,+1 918 555 0107,74133,SaraD@emsforcsp.com,OK,7633 E. 63rd Place,Product Manager,SaraD@emsforcsp.com
 TonyK,Birmingham,United States,Finance,Tony Krijnen,TonyK@emsforcsp.com,,Tony,Krijnen,,14/1108,TRUE,+1 205 555 0108,35243,TonyK@emsforcsp.com,AL,3535 Gradview Parkway Suite 335,CVP Finance,TonyK@emsforcsp.com
 ZrinkaM,San Diego,United States,Sales & Marketing,Zrinka Makovac,ZrinkaM@emsforcsp.com,,Zrinka,Makovac,,131/2103,TRUE,+1 858 555 0109,92121,ZrinkaM@emsforcsp.com,CA,9255 Towne Center Dr.,VP Marketing,ZrinkaM@emsforcsp.com
-'@
-<#
-UserName,Password,Dept,Title
-Alice,P@ssw0rd,Accounting,Manager
-Bob,P@ssw0rd,IT,Manager
-Charlie,P@ssw0rd,Marketing,Manager
-Debbie,P@ssw0rd,Operations,Manager
-Eddie,P@ssw0rd,Accounting,Specialist
-Frieda,P@ssw0rd,IT,Specialist
-George,P@ssw0rd,Marketing,Specialist
-Harriet,P@ssw0rd,Operations,Specialist
-'@
-#>
-
-        RootOUs = 'AlpineSkiHouse'
-        ChildOUs = 'Users','Computers','Groups','Servers','Service Accounts'
-        UsersOUs = 'Cloud Users','Non-Cloud Users'
-        GroupsOUs = 'Cloud Security Groups','Non-Cloud Security Groups'
-        TestObjCount = 5
-        LabCount = 6
-
-    }
-} 
-
