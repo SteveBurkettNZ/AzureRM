@@ -21,7 +21,7 @@ Import-Module Azure -Verbose
 # Authenticate to your Azure account
 Login-AzureRmAccount
 
-$count = 13
+$count = 16
 
 # Adjust the 'yournamehere' part of these three strings to
 # something unique for you. Leave the last two characters in each.
