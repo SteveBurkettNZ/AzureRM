@@ -10,15 +10,17 @@ $msolcred = get-credential
 connect-msolservice -credential $msolcred
 
 # Bulk add users from CSV
-$NewUsers = Import-Csv -Path .\NewUsers.csv
-ForEach($NewUser in $NewUsers){New-MsolUser -UserPrincipalName $NewUser.UserPrincipalName -DisplayName $NewUser.DisplayName -FirstName $NewUser.Firstname -LastName $NewUser.LastName -Password $NewUser.Password -Department $NewUser.Department -UsageLocation $NewUser.UsageLocation}
+$NewUsers = Import-Csv -Path C:\Setup\O365UserData.csv
+ForEach($NewUser in $NewUsers){New-MsolUser -UserPrincipalName $NewUser.UserPrincipalName -DisplayName $NewUser.DisplayName -FirstName $NewUser.Firstname -LastName $NewUser.LastName -Password $NewUser.Password -Department $NewUser.Department -UsageLocation $NewUser.Country}
 
-# Bulk License Users from CSV
-$LicenseUsers = Import-CSV -Path .\LicenseUsers.csv
+break
 
 # Fetch SKU
-# $SKU = Get-MsolAccountSku 
+Get-MsolAccountSku 
 
-# Apply Licenses to Users
+## Bulk License Users from CSV
+$LicenseUsers = Import-CSV -Path .\LicenseUsers.csv
+# Apply EMS Licenses to Our Users
 ForEach($LicenseUser in $LicenseUsers){Set-MsolUserLicense -UserPrincipalName $LicenseUser.UPN -AddLicenses MOD411530:EMS}
-
+# Apply Active Directory Premium Licenses to Our Users
+ForEach($LicenseUser in $LicenseUsers){Set-MsolUserLicense -UserPrincipalName $LicenseUser.UPN -AddLicenses MOD411530:ENTERPRISEPREMIUM}
