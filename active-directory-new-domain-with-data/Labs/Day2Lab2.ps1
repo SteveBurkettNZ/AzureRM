@@ -24,7 +24,7 @@ break
 #Add new UPN Domain name to on-premises Active Directory 
     $LocalADDomain = "corp.alpineskihouse.com"
     $PublicDomainName = 'emsforcsp.com'
-    Set-ADForest -identity "$LocalADDomain" -UPNSuffixes @{Add="$PublicDomainName "}
+    Set-ADForest -identity "$LocalADDomain" -UPNSuffixes @{Add="$PublicDomainName"}
 # Add new UPN to cloud users
     $CloudUserPath = 'OU=Cloud Users,OU=Users,OU=AlpineSkiHouse,DC=corp,DC=AlpineSkiHouse,DC=com'
     Get-ADUser -SearchBase $CloudUserPath -Filter * | ForEach-Object -Process {
