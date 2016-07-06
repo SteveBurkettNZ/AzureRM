@@ -28,7 +28,7 @@ break
 # Add new UPN to cloud users
     $CloudUserPath = 'OU=Cloud Users,OU=Users,OU=AlpineSkiHouse,DC=corp,DC=AlpineSkiHouse,DC=com'
     Get-ADUser -SearchBase $CloudUserPath -Filter * | ForEach-Object -Process {
-        $NewUPN = $PSItem.UserPrincipalName.Replace ($LocalADDomain,$PublicDomainName)
+        $NewUPN = $PSItem.UserPrincipalName.Replace($LocalADDomain,$PublicDomainName)
         $PSItem | Set-ADUser -UserPrincipalName $NewUPN -EmailAddress $NewUPN
     }
 <# -------------------------------------------------------------------------------------------------------------------------------------------------------- #>

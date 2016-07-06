@@ -21,10 +21,10 @@ Import-Module Azure -Verbose
 # Authenticate to your Azure account
 Login-AzureRmAccount
 
-$count = 17
+# A number to use as a suffix for everything just to make it unique
+$count = 19
 
-# Adjust the 'yournamehere' part of these three strings to
-# something unique for you. Leave the last two characters in each.
+# Adjust the '<emslab>' part of these three strings to something unique for you. Leave the last two characters in each.
 $URI       = 'https://raw.githubusercontent.com/SteveBurkettNZ/AzureRM/master/active-directory-new-domain-with-data/azuredeploy.json'
 $Location  = 'West US'
 $rgname    = 'emslab'+ $count + 'rg'
