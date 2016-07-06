@@ -21,7 +21,7 @@ Import-Module Azure -Verbose
 # Authenticate to your Azure account
 Login-AzureRmAccount
 
-$count = 16
+$count = 18
 
 # Adjust the 'yournamehere' part of these three strings to
 # something unique for you. Leave the last two characters in each.
@@ -39,17 +39,12 @@ if (Test-AzureRmDnsAvailability -DomainNameLabel $addnsName -Location $Location)
 New-AzureRmResourceGroup -Name $rgname -Location $Location
 
 # Parameters for the template and configuration
-$MyParams = @{
-    newStorageAccountName = $saname
-    location              = 'West US'
-    domainName            = 'alpineskihouse.com'
-    addnsName             = $addnsName
-   }
+
 
 $MyParams = @{
     newStorageAccountName = $saname
     location              = 'West US'
-    domainName            = 'alpineskihouse.com'
+    domainName            = 'corp.alpineskihouse.com'
     addnsName             = $addnsName +  $count
     virtualNetworkName    = 'adVNET' + $count
     adSubnetName          = 'adSubnet' + $count

@@ -1,25 +1,38 @@
-﻿$MSOLDomain = 'mod411530.onmicrosoft.com'
+﻿<# EMS for CSP Course : Day 2 Lab 2
 
+    Azure AD Connect
+
+#>
+
+<# -------------------------------------------------------------------------------------------------------------------------------------------------------- #>
+# Step 2:  Prepare the Azure Active Directory Connect Service Account
+    $MSOLDomain = 'mod411530.onmicrosoft.com'
 
 # To connect to Azure Active Directory
-$msolcred = get-credential
-connect-msolservice -credential $msolcred
+    $msolcred = get-credential
+    connect-msolservice -credential $msolcred
 
-# Create Service Account for Azure AD Connect
-New-MsolUser -UserPrincipalName "SVC_AADConnect@$MSOLDomain" -DisplayName SVC_AADConnect -FirstName SVC_AADConnect -PasswordNeverExpires $True
-Add-MsolRoleMember -RoleName "Company Administrator" -RoleMemberEmailAddress "SVC_AADConnect@$MSOLDomain"
+# Create Office 365 Service Account for Azure AD Connect
+    New-MsolUser -UserPrincipalName "SVC_AADConnect@$MSOLDomain" -DisplayName SVC_AADConnect -FirstName SVC_AADConnect -Password "P@ssw0rd" -PasswordNeverExpires $True -ForceChangePassword $false
+    Add-MsolRoleMember -RoleName "Company Administrator" -RoleMemberEmailAddress "SVC_AADConnect@$MSOLDomain"
+<# -------------------------------------------------------------------------------------------------------------------------------------------------------- #>
 
-#Add new UPN Domain name, change all users to new UPN. 
-$PublicDomainName = 'emsforcsp.com'
+break
 
-Set-ADForest -identity "$MSOLDomain" -UPNSuffixes @{Add="$PublicDomainName "}
+<# -------------------------------------------------------------------------------------------------------------------------------------------------------- #>
+# Step 3: Configure the Active Directory User Principal Name
+#Add new UPN Domain name to on-premises Active Directory 
+    $LocalADDomain = "alpineskihouse.com"
+    $PublicDomainName = 'emsforcsp.com'
+    Set-ADForest -identity "$LocalADDomain" -UPNSuffixes @{Add="$PublicDomainName "}
+# Add new UPN to cloud users
+    $CloudUserPath = 'OU=Cloud Users,OU=Users,OU=AlpineSkiHouse,DC=AlpineSkiHouse,DC=com'
+    Get-ADUser -SearchBase $CloudUserPath -Filter * | ForEach-Object -Process {
+        $NewUPN = $PSItem.UserPrincipalName.Replace ($LocalADDomain,$PublicDomainName)
+        $PSItem | Set-ADUser -UserPrincipalName $NewUPN -EmailAddress $NewUPN
+    }
+<# -------------------------------------------------------------------------------------------------------------------------------------------------------- #>
 
-$CloudUsers = 'OU=Cloud Users...'
-
-Get-ADUser -SearchBase $CloudUsers -Filter * | ForEach-Object -Process {
-    $NewUPN = $PSItem.UserPrincipalName.Replace ($MSOLDomain,$PublicDomainName)
-    $PSItems | Set-ADUser -UserPrincipalName $NewUPN -EmailAddress $NewUPN
-}
 
 # Enable Device Writeback Feature
 Import-Module 'C:\Program Files\Microsoft Azure Active Directory Connect\AdPrep\AdSyncPrep.psm1'
