@@ -22,11 +22,11 @@ break
 <# -------------------------------------------------------------------------------------------------------------------------------------------------------- #>
 # Step 3: Configure the Active Directory User Principal Name
 #Add new UPN Domain name to on-premises Active Directory 
-    $LocalADDomain = "alpineskihouse.com"
+    $LocalADDomain = "copr.alpineskihouse.com"
     $PublicDomainName = 'emsforcsp.com'
     Set-ADForest -identity "$LocalADDomain" -UPNSuffixes @{Add="$PublicDomainName "}
 # Add new UPN to cloud users
-    $CloudUserPath = 'OU=Cloud Users,OU=Users,OU=AlpineSkiHouse,DC=AlpineSkiHouse,DC=com'
+    $CloudUserPath = 'OU=Cloud Users,OU=Users,OU=AlpineSkiHouse,DC=corp,DC=AlpineSkiHouse,DC=com'
     Get-ADUser -SearchBase $CloudUserPath -Filter * | ForEach-Object -Process {
         $NewUPN = $PSItem.UserPrincipalName.Replace ($LocalADDomain,$PublicDomainName)
         $PSItem | Set-ADUser -UserPrincipalName $NewUPN -EmailAddress $NewUPN
@@ -34,7 +34,8 @@ break
 <# -------------------------------------------------------------------------------------------------------------------------------------------------------- #>
 
 
-# Enable Device Writeback Feature
+
+<# -------------------------------------------------------------------------------------------------------------------------------------------------------- #>
+# Step 7:  Enable Device Writeback Feature
 Import-Module 'C:\Program Files\Microsoft Azure Active Directory Connect\AdPrep\AdSyncPrep.psm1'
 Initialize-ADSyncDeviceWriteback –AdConnectorAccount svc_aadconnect
-
