@@ -22,7 +22,7 @@ break
 <# -------------------------------------------------------------------------------------------------------------------------------------------------------- #>
 # Step 3: Configure the Active Directory User Principal Name
 #Add new UPN Domain name to on-premises Active Directory 
-    $LocalADDomain = "copr.alpineskihouse.com"
+    $LocalADDomain = "corp.alpineskihouse.com"
     $PublicDomainName = 'emsforcsp.com'
     Set-ADForest -identity "$LocalADDomain" -UPNSuffixes @{Add="$PublicDomainName "}
 # Add new UPN to cloud users
