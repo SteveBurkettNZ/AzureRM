@@ -22,7 +22,7 @@ Import-Module Azure -Verbose
 Login-AzureRmAccount
 
 # A number to use as a suffix for everything just to make it unique
-$count = 19
+$count = 20
 
 # Adjust the '<emslab>' part of these three strings to something unique for you. Leave the last two characters in each.
 $URI       = 'https://raw.githubusercontent.com/SteveBurkettNZ/AzureRM/master/active-directory-new-domain-with-data/azuredeploy.json'
