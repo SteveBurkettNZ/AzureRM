@@ -1,4 +1,10 @@
-﻿
+﻿<# EMS for CSP Course : Day 2 Lab 3
+
+    MFA and Self-Service
+
+#>
+
+<# -------------------------------------------------------------------------------------------------------------------------------------------------------- #>
 # STEP 3: Enable MFA Individual user via PowerShell
 $UserCredential = Get-Credential
 Connect-MsolService -Credential $UserCredential
@@ -8,9 +14,14 @@ $st.RelyingParty = "*"
 $st.State = "Enabled"
 $sta = @($st)
 
-Set-MsolUser -UserPrincipalName john.doe@contoso.com -StrongAuthenticationRequirements $sta 
+# Enable MFA for user Allie B
+Set-MsolUser -UserPrincipalName AllieB@emsforcsp.com -StrongAuthenticationRequirements $sta 
 
+<# -------------------------------------------------------------------------------------------------------------------------------------------------------- #>
 
+break
+
+<# -------------------------------------------------------------------------------------------------------------------------------------------------------- #>
 # STEP 4 Enable MFA Bulk User via PowerShell
 $UserCredential = Get-Credential
 Connect-MsolService -Credential $UserCredential

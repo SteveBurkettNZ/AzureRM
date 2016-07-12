@@ -38,4 +38,5 @@ break
 <# -------------------------------------------------------------------------------------------------------------------------------------------------------- #>
 # Step 7:  Enable Device Writeback Feature
 Import-Module 'C:\Program Files\Microsoft Azure Active Directory Connect\AdPrep\AdSyncPrep.psm1'
-Initialize-ADSyncDeviceWriteback –AdConnectorAccount svc_aadconnect
+Initialize-ADSyncDeviceWriteback –AdConnectorAccount svc_AADConnect -DomainName corp.alpineskihouse.com
+

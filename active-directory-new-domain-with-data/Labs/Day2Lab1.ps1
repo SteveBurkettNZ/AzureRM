@@ -31,6 +31,10 @@ break
     ForEach($LicenseUser in $LicenseUsers){Set-MsolUserLicense -UserPrincipalName $LicenseUser.UserPrincipalName -AddLicenses MOD411530:EMS}
 # Apply Active Directory Premium Licenses to Our Users
     ForEach($LicenseUser in $LicenseUsers){Set-MsolUserLicense -UserPrincipalName $LicenseUser.UserPrincipalName -AddLicenses MOD411530:ENTERPRISEPREMIUM}
+
+# Now check License SKU consumption
+    Get-MsolAccountSku 
+
 <# -------------------------------------------------------------------------------------------------------------------------------------------------------- #>
 
 break
@@ -38,6 +42,7 @@ break
 <# -------------------------------------------------------------------------------------------------------------------------------------------------------- #>
 #Step 6: Create new Delegated and Dynamic Groups
 
+ # Grant the admin user Premium license
     Set-MsolUserLicense -UserPrincipalName admin1@MOD411530.onmicrosoft.com -AddLicenses MOD411530:ENTERPRISEPREMIUM 
 
 <# -------------------------------------------------------------------------------------------------------------------------------------------------------- #>
