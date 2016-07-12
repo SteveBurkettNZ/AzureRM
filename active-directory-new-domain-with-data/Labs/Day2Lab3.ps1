@@ -6,34 +6,33 @@
 
 <# -------------------------------------------------------------------------------------------------------------------------------------------------------- #>
 # STEP 3: Enable MFA Individual user via PowerShell
-$UserCredential = Get-Credential
-Connect-MsolService -Credential $UserCredential
-
-$st = New-Object -TypeName Microsoft.Online.Administration.StrongAuthenticationRequirement
-$st.RelyingParty = "*"
-$st.State = "Enabled"
-$sta = @($st)
-
+    $UserCredential = Get-Credential
+    Connect-MsolService -Credential $UserCredential
+# Create Secure Token
+    $st = New-Object -TypeName Microsoft.Online.Administration.StrongAuthenticationRequirement
+    $st.RelyingParty = "*"
+    $st.State = "Enabled"
+    $sta = @($st)
 # Enable MFA for user Allie B
-Set-MsolUser -UserPrincipalName AllieB@emsforcsp.com -StrongAuthenticationRequirements $sta 
+    Set-MsolUser -UserPrincipalName AllieB@emsforcsp.com -StrongAuthenticationRequirements $sta 
 
 <# -------------------------------------------------------------------------------------------------------------------------------------------------------- #>
 
 break
 
 <# -------------------------------------------------------------------------------------------------------------------------------------------------------- #>
-# STEP 4 Enable MFA Bulk User via PowerShell
-$UserCredential = Get-Credential
-Connect-MsolService -Credential $UserCredential
-
-# Bulk MFA Import
-$st = New-Object -TypeName Microsoft.Online.Administration.StrongAuthenticationRequirement
-$st.RelyingParty = "*"
-$st.State = “Enabled"
-$sta = @($st)
-$csvpath = “C:\cspdemoems MFA Users.csv”
-$MFAUsers = Import-csv $csvpath
-
-ForEach ($user in $MFAUsers.username) {
-Set-MsolUser -UserPrincipalName $User -StrongAuthenticationRequirements $sta
-}
+# STEP 6 Enable MFA Bulk User via PowerShell
+    $UserCredential = Get-Credential
+    Connect-MsolService -Credential $UserCredential
+# Create Secure Token
+    $st = New-Object -TypeName Microsoft.Online.Administration.StrongAuthenticationRequirement
+    $st.RelyingParty = "*"
+    $st.State = “Enabled"
+    $sta = @($st)
+# Import CSV
+    $csvpath = “C:\Setup\Lab 3\MFA-Users.csv”
+    $MFAUsers = Import-csv $csvpath
+# Enable MFA for bulk users
+    ForEach ($user in $MFAUsers.username) {
+        Set-MsolUser -UserPrincipalName $User -StrongAuthenticationRequirements $sta
+        }
