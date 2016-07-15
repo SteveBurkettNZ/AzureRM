@@ -532,100 +532,40 @@
           ]
         }
       },
-      {
-        "apiVersion": "2015-05-01-preview",
-        "type": "Microsoft.Compute/virtualMachines",
-        "name": "[parameters('w10VMName')]",
-        "location": "[parameters('location')]",
-        "dependsOn": [
-          "[resourceId('Microsoft.Storage/storageAccounts',parameters('newStorageAccountName'))]",
-          "[resourceId('Microsoft.Network/networkInterfaces',parameters('w10NicName'))]",
-          "[resourceId('Microsoft.Compute/availabilitySets', parameters('w10AvailabilitySetName'))]",
-          "[resourceId('Microsoft.Network/loadBalancers',variables('w10lbName'))]"
-        ],
-        "properties": {
-          "hardwareProfile": {
-            "vmSize": "[parameters('adVMSize')]"
-          },
-          "availabilitySet": {
-            "id": "[resourceId('Microsoft.Compute/availabilitySets', parameters('w10AvailabilitySetName'))]"
-          },
-          "osProfile": {
-            "computerName": "[parameters('w10VMName')]",
-            "adminUsername": "[parameters('adminUsername')]",
-            "adminPassword": "[parameters('adminPassword')]"
-          },
-          "storageProfile": {
-            "imageReference": {
-              "publisher": "[parameters('imagePublisher')]",
-              "offer": "[parameters('imageOffer')]",
-              "sku": "[parameters('imageSKU')]",
-              "version": "latest"
-            },
-            "osDisk": {
-              "name": "osdisk",
-              "vhd": {
-                "uri": "[concat('http://',parameters('newStorageAccountName'),'.blob.core.windows.net/vhds/','w10osdisk.vhd')]"
-              },
-              "caching": "ReadWrite",
-              "createOption": "FromImage"
-            },
-            "dataDisks": [
-              {
-                "vhd": {
-                  "uri": "[concat('http://',parameters('newStorageAccountName'),'.blob.core.windows.net/vhds/', variables('w10DataDisk'),'-1.vhd')]"
-                },
-                "name": "[concat(parameters('w10VMName'),'-data-disk1')]",
-                "caching": "None",
-                "createOption": "empty",
-                "diskSizeGB": "[variables('w10DataDiskSize')]",
-                "lun": 0
-              }
-            ]
-          },
-          "networkProfile": {
-            "networkInterfaces": [
-              {
-                "id": "[resourceId('Microsoft.Network/networkInterfaces',parameters('w10NicName'))]"
-              }
-            ]
-          }
-        },
-        "resources": [
-          {
-            "type": "Microsoft.Compute/virtualMachines/extensions",
-            "name": "[concat(parameters('adVMName'),'/CreateADForest')]",
-            "apiVersion": "2015-05-01-preview",
-            "location": "[parameters('location')]",
-            "dependsOn": [
-              "[resourceId('Microsoft.Compute/virtualMachines', parameters('adVMName'))]"
-            ],
-            "properties": {
-              "publisher": "Microsoft.Powershell",
-              "type": "DSC",
-              "typeHandlerVersion": "2.11",
-              "autoUpgradeMinorVersion": true,
-              "settings": {
-                "ModulesUrl": "[variables('adModulesURL')]",
-                "ConfigurationFunction": "[variables('adConfigurationFunction')]",
-                "Properties": {
-                  "DomainName": "[parameters('domainName')]",
-                  "AdminCreds": {
-                    "UserName": "[parameters('adminUserName')]",
-                    "Password": "PrivateSettingsRef:AdminPassword"
-                  }
+      "resources": [
+        {
+          "type": "Microsoft.Compute/virtualMachines/extensions",
+          "name": "[concat(parameters('adVMName'),'/CreateADForest')]",
+          "apiVersion": "2015-05-01-preview",
+          "location": "[parameters('location')]",
+          "dependsOn": [
+            "[resourceId('Microsoft.Compute/virtualMachines', parameters('adVMName'))]"
+          ],
+          "properties": {
+            "publisher": "Microsoft.Powershell",
+            "type": "DSC",
+            "typeHandlerVersion": "2.11",
+            "autoUpgradeMinorVersion": true,
+            "settings": {
+              "ModulesUrl": "[variables('adModulesURL')]",
+              "ConfigurationFunction": "[variables('adConfigurationFunction')]",
+              "Properties": {
+                "DomainName": "[parameters('domainName')]",
+                "AdminCreds": {
+                  "UserName": "[parameters('adminUserName')]",
+                  "Password": "PrivateSettingsRef:AdminPassword"
                 }
-              },
-              "protectedSettings": {
-                "Items": {
-                  "AdminPassword": "[parameters('adminPassword')]"
-                },
-                "DataBlobUri": "[concat(parameters('assetLocation'),'CreateADDomainWithData.psd1')]"
               }
+            },
+            "protectedSettings": {
+              "Items": {
+                "AdminPassword": "[parameters('adminPassword')]"
+              },
+              "DataBlobUri": "[concat(parameters('assetLocation'),'CreateADDomainWithData.psd1')]"
             }
           }
-        ]
-      },
+        }
+      ],
       {
         "name": "UpdateVNetDNS",
         "type": "Microsoft.Resources/deployments",
@@ -661,6 +601,66 @@
               ]
             }
           }
+        }
+      }
+    },
+    {
+      "apiVersion": "2015-05-01-preview",
+      "type": "Microsoft.Compute/virtualMachines",
+      "name": "[parameters('w10VMName')]",
+      "location": "[parameters('location')]",
+      "dependsOn": [
+        "[resourceId('Microsoft.Storage/storageAccounts',parameters('newStorageAccountName'))]",
+        "[resourceId('Microsoft.Network/networkInterfaces',parameters('w10NicName'))]",
+        "[resourceId('Microsoft.Compute/availabilitySets', parameters('w10AvailabilitySetName'))]",
+        "[resourceId('Microsoft.Network/loadBalancers',variables('w10lbName'))]"
+      ],
+      "properties": {
+        "hardwareProfile": {
+          "vmSize": "[parameters('adVMSize')]"
+        },
+        "availabilitySet": {
+          "id": "[resourceId('Microsoft.Compute/availabilitySets', parameters('w10AvailabilitySetName'))]"
+        },
+        "osProfile": {
+          "computerName": "[parameters('w10VMName')]",
+          "adminUsername": "[parameters('adminUsername')]",
+          "adminPassword": "[parameters('adminPassword')]"
+        },
+        "storageProfile": {
+          "imageReference": {
+            "publisher": "[parameters('imagePublisher')]",
+            "offer": "[parameters('imageOffer')]",
+            "sku": "[parameters('imageSKU')]",
+            "version": "latest"
+          },
+          "osDisk": {
+            "name": "osdisk",
+            "vhd": {
+              "uri": "[concat('http://',parameters('newStorageAccountName'),'.blob.core.windows.net/vhds/','w10osdisk.vhd')]"
+            },
+            "caching": "ReadWrite",
+            "createOption": "FromImage"
+          },
+          "dataDisks": [
+            {
+              "vhd": {
+                "uri": "[concat('http://',parameters('newStorageAccountName'),'.blob.core.windows.net/vhds/', variables('w10DataDisk'),'-1.vhd')]"
+              },
+              "name": "[concat(parameters('w10VMName'),'-data-disk1')]",
+              "caching": "None",
+              "createOption": "empty",
+              "diskSizeGB": "[variables('w10DataDiskSize')]",
+              "lun": 0
+            }
+          ]
+        },
+        "networkProfile": {
+          "networkInterfaces": [
+            {
+              "id": "[resourceId('Microsoft.Network/networkInterfaces',parameters('w10NicName'))]"
+            }
+          ]
         }
       },
       {
