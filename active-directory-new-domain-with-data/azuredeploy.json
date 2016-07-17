@@ -295,17 +295,15 @@
       }
     },
     {
-      "type": "Microsoft.Compute/availabilitySets",
-      "name": "[parameters('adAvailabilitySetName')]",
       "apiVersion": "2015-05-01-preview",
+      "type": "Microsoft.Network/publicIPAddresses",
+      "name": "[parameters('w10publicIPAddressName')]",
       "location": "[parameters('location')]",
-      "dependsOn": [ ],
-      "tags": {
-        "displayName": "test"
-      },
       "properties": {
-        "platformUpdateDomainCount": 1,
-        "platformFaultDomainCount": 1
+        "publicIPAllocationMethod": "[parameters('publicIPAddressType')]",
+        "dnsSettings": {
+          "domainNameLabel": "[parameters('w10dnsName')]"
+        }
       }
     },
     {
@@ -614,8 +612,8 @@
             "type": "Microsoft.Resources/deployments"
           }
         ]
-            }
-     },
+      }
+    },
     {
       "apiVersion": "2015-05-01-preview",
       "type": "Microsoft.Compute/virtualMachines",
@@ -713,7 +711,7 @@
             }
           }
         ]
-       }
+      }
     }
   ] 
 }
