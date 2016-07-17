@@ -199,7 +199,7 @@
     "w10AvailabilitySetName": {
       "type": "string",
       "metadata": {
-        "description": "The name of the availability set that the AD VM is created in"
+        "description": "The name of the availability set that the W10 VM is created in"
       },
       "defaultValue": "w10AvailabiltySet"
     },
@@ -234,7 +234,11 @@
         "description": "The location of resources such as templates and DSC modules that the script is dependent"
       },
       "defaultValue": "https://raw.githubusercontent.com/SteveBurkettNZ/AzureRM/master/active-directory-new-domain-with-data/"
-    }
+    },
+      "availName": {
+          "type": "string",
+          "minLength": 1
+      }
   },
   "variables": {
     "adLBFE": "LBFE",
@@ -301,6 +305,18 @@
           "domainNameLabel": "[parameters('w10dnsName')]"
         }
       }
+    },
+    {
+      "type": "Microsoft.Compute/availabilitySets",
+      "name": "[parameters('adAvailabilitySetName')]",
+      "apiVersion": "2015-05-01-preview",
+      "location": "[parameters('location')]"
+    },
+    {
+      "type": "Microsoft.Compute/availabilitySets",
+      "name": "[parameters('w10AvailabilitySetName')]",
+      "apiVersion": "2015-05-01-preview",
+      "location": "[parameters('location')]"
     },
     {
       "name": "VNet",

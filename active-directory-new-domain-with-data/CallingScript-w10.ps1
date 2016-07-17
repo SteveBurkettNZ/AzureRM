@@ -22,7 +22,7 @@ Import-Module Azure -Verbose
 Login-AzureRmAccount
 
 # A number to use as a suffix for everything just to make it unique
-$count = 23
+$count = 13
 
 # Adjust the '<emslab>' part of these three strings to something unique for you. Leave the last two characters in each.
 $URI       = 'https://raw.githubusercontent.com/SteveBurkettNZ/AzureRM/master/active-directory-new-domain-with-data/azuredeploy.json'
@@ -55,9 +55,11 @@ $MyParams = @{
     adNicIPAddress        = '10.0.0.' + $count
     w10NicIPAddress       = '10.0.0.' + ($count+10)
     publicIPAddressName   = 'adpublicIP' + $count
-    w10publicIPAddressName = 'w10publicIP' + $count      
+    w10publicIPAddressName = 'w10publicIP' + $count    
     adVMName              = 'adDC' + $count
+    w10VMName             = 'w10DC' + $count   
     adAvailabilitySetName = 'adAvailabilitySet' + $count
+    w10AvailabilitySetName = 'w10AvailabilitySet' + $count
  }
 
 
