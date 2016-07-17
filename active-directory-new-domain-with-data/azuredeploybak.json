@@ -70,13 +70,6 @@
       },
       "defaultValue": "adNic"
     },
-    "w10NicName": {
-      "type": "string",
-      "metadata": {
-        "description": "The name of the NIC attached to the new VM"
-      },
-      "defaultValue": "w10Nic"
-    },
     "adNicIPAddress": {
       "type": "string",
       "metadata": {
@@ -84,26 +77,12 @@
       },
       "defaultValue": "10.0.0.4"
     },
-    "w10NicIPAddress": {
-      "type": "string",
-      "metadata": {
-        "description": "The IP address of the new AD VM"
-      },
-      "defaultValue": "10.0.0.5"
-    },
     "publicIPAddressName": {
       "type": "string",
       "metadata": {
         "description": "The name of the public IP address used by the Load Balancer"
       },
       "defaultValue": "adpublicIP"
-    },
-    "w10publicIPAddressName": {
-      "type": "string",
-      "metadata": {
-        "description": "The name of the public IP address used by the Load Balancer"
-      },
-      "defaultValue": "w10publicIP"
     },
     "publicIPAddressType": {
       "type": "string",
@@ -122,13 +101,6 @@
         "description": "The name of the VM created"
       },
       "defaultValue": "adDC"
-    },
-    "w10VMName": {
-      "type": "string",
-      "metadata": {
-        "description": "The name of the VM created"
-      },
-      "defaultValue": "w10DC"
     },
     "adminUsername": {
       "type": "string",
@@ -196,13 +168,6 @@
       },
       "defaultValue": "adAvailabiltySet"
     },
-    "w10AvailabilitySetName": {
-      "type": "string",
-      "metadata": {
-        "description": "The name of the availability set that the AD VM is created in"
-      },
-      "defaultValue": "w10AvailabiltySet"
-    },
     "domainName": {
       "type": "string",
       "metadata": {
@@ -210,12 +175,6 @@
       }
     },
     "addnsName": {
-      "type": "string",
-      "metadata": {
-        "description": "The DNS prefix for the public IP address used by the Load Balancer"
-      }
-    },
-    "w10dnsName": {
       "type": "string",
       "metadata": {
         "description": "The DNS prefix for the public IP address used by the Load Balancer"
@@ -234,10 +193,6 @@
         "description": "The location of resources such as templates and DSC modules that the script is dependent"
       },
       "defaultValue": "https://raw.githubusercontent.com/SteveBurkettNZ/AzureRM/master/active-directory-new-domain-with-data/"
-    },
-    "testName": {
-      "type": "string",
-      "minLength": 1
     }
   },
   "variables": {
@@ -255,22 +210,15 @@
     "adBEAddressPoolID": "[concat(variables('adlbID'),'/backendAddressPools/',variables('adLBBE'))]",
     "adDataDisk": "ADDataDisk",
     "adDataDiskSize": 5,
-    "w10LBFE": "LBFE",
-    "w10LBBE": "LBBE",
-    "w10RDPNAT": "adRDP",
-    "w10NicId": "[resourceId('Microsoft.Network/networkInterfaces',parameters('w10NicName'))]",
-    "w10IPConfigID": "[concat(variables('w10NicId'),'/ipConfigurations/ipconfig1')]",
-    "w10lbID": "[resourceId('Microsoft.Network/loadBalancers',variables('w10LBName'))]",
-    "w10lbFEConfigID": "[concat(variables('adlbID'),'/frontendIPConfigurations/',variables('w10LBFE'))]",
-    "w10RDPNATRuleID": "[concat(variables('adlbID'),'/inboundNatRules/',variables('w10RDPNAT'))]",
-    "w10BEAddressPoolID": "[concat(variables('adlbID'),'/backendAddressPools/',variables('w10LBBE'))]",
-    "w10LBName": "[concat('w10LoadBalancer',parameters('w10VMName'))]",
-    "w10DataDisk": "w10DataDisk",
-    "w10DataDiskSize": 5,
     "vnetTemplateUri": "[concat(parameters('assetLocation'),'vnet.json')]",
     "vnetwithDNSTemplateUri": "[concat(parameters('assetLocation'),'vnet-with-dns-server.json')]",
     "adModulesURL": "[concat(parameters('assetLocation'),'CreateADDomainWithData.ps1.zip')]",
-    "adConfigurationFunction": "CreateADDomainWithData.ps1\\CreateADDomainWithData"
+    "adConfigurationFunction": "CreateADDomainWithData.ps1\\CreateADDomainWithData",
+      "W10vNetPrefix": "10.0.0.0/16",
+      "W10vNetSubnet1Name": "Subnet-1",
+      "W10vNetSubnet1Prefix": "10.0.0.0/24",
+      "W10vNetSubnet2Name": "Subnet-2",
+      "W10vNetSubnet2Prefix": "10.0.1.0/24"
   },
   "resources": [
     {
@@ -298,15 +246,7 @@
       "type": "Microsoft.Compute/availabilitySets",
       "name": "[parameters('adAvailabilitySetName')]",
       "apiVersion": "2015-05-01-preview",
-      "location": "[parameters('location')]",
-      "dependsOn": [ ],
-      "tags": {
-        "displayName": "test"
-      },
-      "properties": {
-        "platformUpdateDomainCount": 1,
-        "platformFaultDomainCount": 1
-      }
+      "location": "[parameters('location')]"
     },
     {
       "name": "VNet",
@@ -378,46 +318,6 @@
       }
     },
     {
-      "apiVersion": "2015-05-01-preview",
-      "name": "[variables('w10lbName')]",
-      "type": "Microsoft.Network/loadBalancers",
-      "location": "[parameters('location')]",
-      "dependsOn": [
-        "[resourceId('Microsoft.Network/publicIPAddresses',parameters('w10publicIPAddressName'))]"
-      ],
-      "properties": {
-        "frontendIPConfigurations": [
-          {
-            "name": "[variables('w10LBFE')]",
-            "properties": {
-              "publicIPAddress": {
-                "id": "[resourceId('Microsoft.Network/publicIPAddresses',parameters('w10publicIPAddressName'))]"
-              }
-            }
-          }
-        ],
-        "backendAddressPools": [
-          {
-            "name": "[variables('w10LBBE')]"
-          }
-        ],
-        "inboundNatRules": [
-          {
-            "name": "[variables('w10RDPNAT')]",
-            "properties": {
-              "frontendIPConfiguration": {
-                "id": "[variables('w10lbFEConfigID')]"
-              },
-              "protocol": "tcp",
-              "frontendPort": "[parameters('RDPPort')]",
-              "backendPort": 3389,
-              "enableFloatingIP": false
-            }
-          }
-        ]
-      }
-    },
-    {
       "name": "[parameters('adNicName')]",
       "type": "Microsoft.Network/networkInterfaces",
       "location": "[parameters('location')]",
@@ -444,40 +344,6 @@
               "loadBalancerInboundNatRules": [
                 {
                   "id": "[variables('adRDPNATRuleID')]"
-                }
-              ]
-            }
-          }
-        ]
-      }
-    },
-    {
-      "name": "[parameters('w10NicName')]",
-      "type": "Microsoft.Network/networkInterfaces",
-      "location": "[parameters('location')]",
-      "dependsOn": [
-        "Microsoft.Resources/deployments/VNet",
-        "[concat('Microsoft.Network/loadBalancers/',variables('w10lbName'))]"
-      ],
-      "apiVersion": "2015-05-01-preview",
-      "properties": {
-        "ipConfigurations": [
-          {
-            "name": "ipconfig1",
-            "properties": {
-              "privateIPAllocationMethod": "Static",
-              "privateIPAddress": "[parameters('w10NicIPAddress')]",
-              "subnet": {
-                "id": "[variables('adSubnetRef')]"
-              },
-              "loadBalancerBackendAddressPools": [
-                {
-                  "id": "[variables('w10BEAddressPoolID')]"
-                }
-              ],
-              "loadBalancerInboundNatRules": [
-                {
-                  "id": "[variables('w10RDPNATRuleID')]"
                 }
               ]
             }
@@ -542,178 +408,112 @@
               "id": "[resourceId('Microsoft.Network/networkInterfaces',parameters('adNicName'))]"
             }
           ]
-        },
-        "resources": [
-          {
-            "type": "Microsoft.Compute/virtualMachines/extensions",
-            "name": "[concat(parameters('adVMName'),'/CreateADForest')]",
-            "apiVersion": "2015-05-01-preview",
-            "location": "[parameters('location')]",
-            "dependsOn": [
-              "[resourceId('Microsoft.Compute/virtualMachines', parameters('adVMName'))]"
-            ],
-            "properties": {
-              "publisher": "Microsoft.Powershell",
-              "type": "DSC",
-              "typeHandlerVersion": "2.11",
-              "autoUpgradeMinorVersion": true,
-              "settings": {
-                "ModulesUrl": "[variables('adModulesURL')]",
-                "ConfigurationFunction": "[variables('adConfigurationFunction')]",
-                "Properties": {
-                  "DomainName": "[parameters('domainName')]",
-                  "AdminCreds": {
-                    "UserName": "[parameters('adminUserName')]",
-                    "Password": "PrivateSettingsRef:AdminPassword"
-                  }
+        }
+      },
+      "resources": [
+        {
+          "type": "Microsoft.Compute/virtualMachines/extensions",
+          "name": "[concat(parameters('adVMName'),'/CreateADForest')]",
+          "apiVersion": "2015-05-01-preview",
+          "location": "[parameters('location')]",
+          "dependsOn": [
+            "[resourceId('Microsoft.Compute/virtualMachines', parameters('adVMName'))]"
+          ],
+          "properties": {
+            "publisher": "Microsoft.Powershell",
+            "type": "DSC",
+            "typeHandlerVersion": "2.11",
+            "autoUpgradeMinorVersion": true,
+            "settings": {
+              "ModulesUrl": "[variables('adModulesURL')]",
+              "ConfigurationFunction": "[variables('adConfigurationFunction')]",
+              "Properties": {
+                "DomainName": "[parameters('domainName')]",
+                "AdminCreds": {
+                  "UserName": "[parameters('adminUserName')]",
+                  "Password": "PrivateSettingsRef:AdminPassword"
                 }
-              },
-              "protectedSettings": {
-                "Items": {
-                  "AdminPassword": "[parameters('adminPassword')]"
-                },
-                "DataBlobUri": "[concat(parameters('assetLocation'),'CreateADDomainWithData.psd1')]"
-              }
-            }
-          },
-          {
-            "apiVersion": "2015-01-01",
-            "dependsOn": [
-              "[concat('Microsoft.Compute/virtualMachines/', parameters('adVMName'),'/extensions/CreateADForest')]"
-            ],
-            "name": "UpdateVNetDNS",
-            "properties": {
-              "mode": "Incremental",
-              "parameters": {
-                "location": {
-                  "value": "[parameters('location')]"
-                },
-                "virtualNetworkName": {
-                  "value": "[parameters('virtualNetworkName')]"
-                },
-                "virtualNetworkAddressRange": {
-                  "value": "[parameters('virtualNetworkAddressRange')]"
-                },
-                "subnetName": {
-                  "value": "[parameters('adSubnetName')]"
-                },
-                "subnetRange": {
-                  "value": "[parameters('adSubnet')]"
-                },
-                "DNSServerAddress": {
-                  "value": [
-                    "[parameters('adNicIPAddress')]"
-                  ]
-                }
-              },
-              "templateLink": {
-                "uri": "[variables('vnetwithDNSTemplateUri')]",
-                "contentVersion": "1.0.0.0"
               }
             },
-            "type": "Microsoft.Resources/deployments"
-          }
-        ]
+            "protectedSettings": {
+              "Items": {
+                "AdminPassword": "[parameters('adminPassword')]"
+              },
+              "DataBlobUri": "[concat(parameters('assetLocation'),'CreateADDomainWithData.psd1')]"
             }
-     },
+          }
+        }
+      ]
+    },
     {
-      "apiVersion": "2015-05-01-preview",
-      "type": "Microsoft.Compute/virtualMachines",
-      "name": "[parameters('w10VMName')]",
-      "location": "[parameters('location')]",
+      "name": "UpdateVNetDNS",
+      "type": "Microsoft.Resources/deployments",
+      "apiVersion": "2015-01-01",
       "dependsOn": [
-        "[resourceId('Microsoft.Storage/storageAccounts',parameters('newStorageAccountName'))]",
-        "[resourceId('Microsoft.Network/networkInterfaces',parameters('w10NicName'))]",
-        "[resourceId('Microsoft.Compute/availabilitySets', parameters('w10AvailabilitySetName'))]",
-        "[resourceId('Microsoft.Network/loadBalancers',variables('w10lbName'))]"
+        "[concat('Microsoft.Compute/virtualMachines/', parameters('adVMName'),'/extensions/CreateADForest')]"
       ],
       "properties": {
-        "hardwareProfile": {
-          "vmSize": "[parameters('adVMSize')]"
+        "mode": "Incremental",
+        "templateLink": {
+          "uri": "[variables('vnetwithDNSTemplateUri')]",
+          "contentVersion": "1.0.0.0"
         },
-        "availabilitySet": {
-          "id": "[resourceId('Microsoft.Compute/availabilitySets', parameters('w10AvailabilitySetName'))]"
-        },
-        "osProfile": {
-          "computerName": "[parameters('w10VMName')]",
-          "adminUsername": "[parameters('adminUsername')]",
-          "adminPassword": "[parameters('adminPassword')]"
-        },
-        "storageProfile": {
-          "imageReference": {
-            "publisher": "[parameters('imagePublisher')]",
-            "offer": "[parameters('imageOffer')]",
-            "sku": "[parameters('imageSKU')]",
-            "version": "latest"
+        "parameters": {
+          "location": {
+            "value": "[parameters('location')]"
           },
-          "osDisk": {
-            "name": "osdisk",
-            "vhd": {
-              "uri": "[concat('http://',parameters('newStorageAccountName'),'.blob.core.windows.net/vhds/','w10osdisk.vhd')]"
-            },
-            "caching": "ReadWrite",
-            "createOption": "FromImage"
+          "virtualNetworkName": {
+            "value": "[parameters('virtualNetworkName')]"
           },
-          "dataDisks": [
-            {
-              "vhd": {
-                "uri": "[concat('http://',parameters('newStorageAccountName'),'.blob.core.windows.net/vhds/', variables('w10DataDisk'),'-1.vhd')]"
-              },
-              "name": "[concat(parameters('w10VMName'),'-data-disk1')]",
-              "caching": "None",
-              "createOption": "empty",
-              "diskSizeGB": "[variables('w10DataDiskSize')]",
-              "lun": 0
-            }
-          ]
-        },
-        "networkProfile": {
-          "networkInterfaces": [
-            {
-              "id": "[resourceId('Microsoft.Network/networkInterfaces',parameters('w10NicName'))]"
-            }
-          ]
-        },
-        "resources": [
-          {
-            "name": "UpdateVNetDNSW10",
-            "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2015-06-15",
-            "dependsOn": [
-              "[concat('Microsoft.Compute/virtualMachines/', parameters('w10VMName'))]"
-            ],
-            "properties": {
-              "mode": "Incremental",
-              "templateLink": {
-                "uri": "[variables('vnetwithDNSTemplateUri')]",
-                "contentVersion": "1.0.0.0"
-              },
-              "parameters": {
-                "location": {
-                  "value": "[parameters('location')]"
-                },
-                "virtualNetworkName": {
-                  "value": "[parameters('virtualNetworkName')]"
-                },
-                "virtualNetworkAddressRange": {
-                  "value": "[parameters('virtualNetworkAddressRange')]"
-                },
-                "subnetName": {
-                  "value": "[parameters('adSubnetName')]"
-                },
-                "subnetRange": {
-                  "value": "[parameters('adSubnet')]"
-                },
-                "DNSServerAddress": {
-                  "value": [
-                    "[parameters('w10NicIPAddress')]"
-                  ]
-                }
-              }
-            }
+          "virtualNetworkAddressRange": {
+            "value": "[parameters('virtualNetworkAddressRange')]"
+          },
+          "subnetName": {
+            "value": "[parameters('adSubnetName')]"
+          },
+          "subnetRange": {
+            "value": "[parameters('adSubnet')]"
+          },
+          "DNSServerAddress": {
+            "value": [
+              "[parameters('adNicIPAddress')]"
+            ]
           }
-        ]
-       }
-    }
-  ] 
+        }
+      }
+    },
+      {
+          "name": "W10vNet",
+          "type": "Microsoft.Network/virtualNetworks",
+          "location": "[resourceGroup().location]",
+          "apiVersion": "2015-06-15",
+          "dependsOn": [ ],
+          "tags": {
+              "displayName": "W10vNet"
+          },
+          "properties": {
+              "addressSpace": {
+                  "addressPrefixes": [
+                      "[variables('W10vNetPrefix')]"
+                  ]
+              },
+              "subnets": [
+                  {
+                      "name": "[variables('W10vNetSubnet1Name')]",
+                      "properties": {
+                          "addressPrefix": "[variables('W10vNetSubnet1Prefix')]"
+                      }
+                  },
+                  {
+                      "name": "[variables('W10vNetSubnet2Name')]",
+                      "properties": {
+                          "addressPrefix": "[variables('W10vNetSubnet2Prefix')]"
+                      }
+                  }
+              ]
+          }
+      }
+  ]
 }
+
+
