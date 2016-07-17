@@ -234,11 +234,7 @@
         "description": "The location of resources such as templates and DSC modules that the script is dependent"
       },
       "defaultValue": "https://raw.githubusercontent.com/SteveBurkettNZ/AzureRM/master/active-directory-new-domain-with-data/"
-    },
-      "availName": {
-          "type": "string",
-          "minLength": 1
-      }
+    }
   },
   "variables": {
     "adLBFE": "LBFE",
@@ -257,7 +253,7 @@
     "adDataDiskSize": 5,
     "w10LBFE": "LBFE",
     "w10LBBE": "LBBE",
-    "w10RDPNAT": "adRDP",
+    "w10RDPNAT": "w10RDP",
     "w10NicId": "[resourceId('Microsoft.Network/networkInterfaces',parameters('w10NicName'))]",
     "w10IPConfigID": "[concat(variables('w10NicId'),'/ipConfigurations/ipconfig1')]",
     "w10lbID": "[resourceId('Microsoft.Network/loadBalancers',variables('w10LBName'))]",
