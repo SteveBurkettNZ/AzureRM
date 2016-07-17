@@ -682,12 +682,11 @@
         },
         "resources": [
           {
-            "name": "UpdateVNetDNSW10",
-            "type": "Microsoft.Resources/deployments",
-            "apiVersion": "2015-06-15",
+            "apiVersion": "2015-01-01",
             "dependsOn": [
               "[concat('Microsoft.Compute/virtualMachines/', parameters('w10VMName'))]"
             ],
+            "name": "UpdateVNetDNSw10",
             "properties": {
               "mode": "Incremental",
               "templateLink": {
@@ -716,7 +715,8 @@
                   ]
                 }
               }
-            }
+            },
+            "type": "Microsoft.Resources/deployments"
           }
         ]
       }
