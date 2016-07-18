@@ -198,7 +198,7 @@
     },
     "ClientimageOffer": {
       "type": "string",
-      "defaultValue": "WindowsServer",
+      "defaultValue": "Windows",
       "metadata": {
         "description": "Image Offer"
       }
