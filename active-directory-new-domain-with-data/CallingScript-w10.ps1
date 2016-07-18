@@ -22,7 +22,7 @@ Import-Module Azure -Verbose
 Login-AzureRmAccount
 
 # A number to use as a suffix for everything just to make it unique
-$count = 13
+$count = 12
 
 # Adjust the '<emslab>' part of these three strings to something unique for you. Leave the last two characters in each.
 $URI       = 'https://raw.githubusercontent.com/SteveBurkettNZ/AzureRM/master/active-directory-new-domain-with-data/azuredeploy.json'
@@ -77,13 +77,17 @@ New-AzureRmResourceGroupDeployment @SplatParams -Verbose
 
 # Find the VM IP and FQDN
 $PublicAddress = (Get-AzureRmPublicIpAddress -ResourceGroupName $rgname)[0]
+$PublicAddressw10 = (Get-AzureRmPublicIpAddress -ResourceGroupName $rgname)[1]
 $IP   = $PublicAddress.IpAddress
 $FQDN = $PublicAddress.DnsSettings.Fqdn
+$IPw10   = $PublicAddressw10.IpAddress
+$FQDNw10 = $PublicAddressw10.DnsSettings.Fqdn
 
 # RDP either way
 Start-Process -FilePath mstsc.exe -ArgumentList "/v:$FQDN"
+Start-Process -FilePath mstsc.exe -ArgumentList "/v:$FQDNw10"
 Start-Process -FilePath mstsc.exe -ArgumentList "/v:$IP"
-
+Start-Process -FilePath mstsc.exe -ArgumentList "/v:$IPw10"
 break
 
 # Login as:  alpineskihouse\adadministrator
