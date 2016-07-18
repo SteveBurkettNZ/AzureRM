@@ -679,46 +679,7 @@
               "id": "[resourceId('Microsoft.Network/networkInterfaces',parameters('w10NicName'))]"
             }
           ]
-        },
-        "resources": [
-          {
-            "apiVersion": "2015-01-01",
-            "dependsOn": [
-              "[concat('Microsoft.Compute/virtualMachines/', parameters('w10VMName'))]"
-            ],
-            "name": "UpdateVNetDNSw10",
-            "properties": {
-              "mode": "Incremental",
-              "templateLink": {
-                "uri": "[variables('vnetwithDNSTemplateUri')]",
-                "contentVersion": "1.0.0.0"
-              },
-              "parameters": {
-                "location": {
-                  "value": "[parameters('location')]"
-                },
-                "virtualNetworkName": {
-                  "value": "[parameters('virtualNetworkName')]"
-                },
-                "virtualNetworkAddressRange": {
-                  "value": "[parameters('virtualNetworkAddressRange')]"
-                },
-                "subnetName": {
-                  "value": "[parameters('adSubnetName')]"
-                },
-                "subnetRange": {
-                  "value": "[parameters('adSubnet')]"
-                },
-                "DNSServerAddress": {
-                  "value": [
-                    "[parameters('w10NicIPAddress')]"
-                  ]
-                }
-              }
-            },
-            "type": "Microsoft.Resources/deployments"
-          }
-        ]
+        }
       }
     }
   ] 
