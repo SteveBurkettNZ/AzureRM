@@ -189,6 +189,27 @@
         "description": "Image SKU"
       }
     },
+    "ClientimagePublisher": {
+      "type": "string",
+      "defaultValue": "MicrosoftVisualStudio",
+      "metadata": {
+        "description": "Image Publisher"
+      }
+    },
+    "ClientimageOffer": {
+      "type": "string",
+      "defaultValue": "WindowsServer",
+      "metadata": {
+        "description": "Image Offer"
+      }
+    },
+    "ClientimageSKU": {
+      "type": "string",
+      "defaultValue": "10-Enterprise-N",
+      "metadata": {
+        "description": "Image SKU"
+      }
+    },
     "adAvailabilitySetName": {
       "type": "string",
       "metadata": {
@@ -610,9 +631,9 @@
         },
         "storageProfile": {
           "imageReference": {
-            "publisher": "[parameters('imagePublisher')]",
-            "offer": "[parameters('imageOffer')]",
-            "sku": "[parameters('imageSKU')]",
+            "publisher": "[parameters('ClientimagePublisher')]",
+            "offer": "[parameters('ClientimageOffer')]",
+            "sku": "[parameters('ClientimageSKU')]",
             "version": "latest"
           },
           "osDisk": {
