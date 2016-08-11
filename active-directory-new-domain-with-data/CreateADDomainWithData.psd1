@@ -21,7 +21,7 @@ Harriet,P@ssw0rd,Operations,Specialist
 '@
 
 
-        RootOUs = 'AlpineSkiHouse'
+        RootOUs = 'AdventureWorksCycles'
         ChildOUs = 'Users','Computers','Groups','Servers','Service Accounts'
         UsersOUs = 'Cloud Users','Non-Cloud Users'
         GroupsOUs = 'Cloud Security Groups','Non-Cloud Security Groups'
