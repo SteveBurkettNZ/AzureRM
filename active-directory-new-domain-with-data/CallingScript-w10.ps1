@@ -22,7 +22,7 @@ Import-Module Azure -Verbose
 Login-AzureRmAccount
 
 # A number to use as a suffix for everything just to make it unique
-$count = 12
+$count = 14
 
 # Adjust the '<emslab>' part of these three strings to something unique for you. Leave the last two characters in each.
 $URI       = 'https://raw.githubusercontent.com/SteveBurkettNZ/AzureRM/master/active-directory-new-domain-with-data/azuredeploy.json'
@@ -45,7 +45,7 @@ New-AzureRmResourceGroup -Name $rgname -Location $Location
 $MyParams = @{
     newStorageAccountName = $saname
     location              = 'West US'
-    domainName            = 'corp.alpineskihouse.com'
+    domainName            = 'corp.adventureworkscycles.com'
     addnsName             = $addnsName +  $count
     w10dnsName            = $w10dnsName + $count 
     virtualNetworkName    = 'adVNET' + $count
@@ -68,7 +68,7 @@ $SplatParams = @{
     TemplateUri             = $URI 
     ResourceGroupName       = $rgname 
     TemplateParameterObject = $MyParams
-    Name                    = 'AlpineSkiHouseForest'
+    Name                    = 'AdventureWorksCyclesForest'
    }
 
 # This takes ~30 minutes
@@ -90,7 +90,7 @@ Start-Process -FilePath mstsc.exe -ArgumentList "/v:$IP"
 Start-Process -FilePath mstsc.exe -ArgumentList "/v:$IPw10"
 break
 
-# Login as:  alpineskihouse\adadministrator
+# Login as:  adventureworkscycles\adadministrator
 # Use the password you supplied at the beginning of the build.
 
 # Delete the entire resource group when finished
